@@ -40,20 +40,26 @@ all: ${BINARIES}
 main: main.o test_compiler_2.o
 	${CXX} ${CXXFLAGS} $^ -o $@
 
+main2: main2.o
+	${CXX} ${CXXFLAGS} $^ -o $@
+
 # Note that header files are only included to update the compilation when they change.
 # They do not need to be included in the compilation command, but there is no harm if they are included.
+# Note that transitive includes must also be included for this to work properly.
+# A more robust solution exists but is out-of-scope for this lesson.
 main.o: main.cpp test_compiler.h test_compiler_2.h
-	${CXX} ${CXXFLAGS} $^ -o $@
+	${CXX} ${CXXFLAGS} $^ -c
 
 main2.o: main2.cpp test_compiler.h
-	${CXX} ${CXXFLAGS} $^ -o $@
+	${CXX} ${CXXFLAGS} $^ -c
 
-test_compiler_2.o: test_compiler_2.h
-	${CXX} ${CXXFLAGS} $^ -o $@
+test_compiler_2.o: test_compiler_2.cpp test_compiler_2.h 
+	${CXX} ${CXXFLAGS} $^ -c
 
+# Explain this a bit
+# .gch: precompiled header (don't worry about it)
 clean:
-	# Explain this a bit
-	rm -rf *.o ${BINARIES}
+	rm -rf *.o *.gch ${BINARIES}
 ```
 
 4. Note how to use GNU `make`, i.e. `make` with no arguments runs the first rule, otherwise specify name of rule.

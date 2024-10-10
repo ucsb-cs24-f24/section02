@@ -1,3 +1,5 @@
+#pragma once
+
 #include "test_compiler.h"
 
 struct TestStruct2 {
